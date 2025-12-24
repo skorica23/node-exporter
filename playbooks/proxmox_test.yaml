@@ -1,0 +1,16 @@
+- name: Proxmox API connectivity test
+  hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: Query Proxmox version
+      community.proxmox.proxmox_version:
+        api_host: "{{ proxmox_api_host }}"
+        api_user: "{{ ansible_user }}"
+        api_token_secret: "{{ ansible_password }}"
+      register: proxmox_info
+
+    - name: Show Proxmox info
+      debug:
+        var: proxmox_info
