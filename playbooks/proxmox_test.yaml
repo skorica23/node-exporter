@@ -5,7 +5,7 @@
 
   tasks:
     - name: Query Proxmox version
-      community.proxmox.proxmox_cluster_info:
+      community.proxmox.proxmox_node_info:
         api_host: "{{ proxmox_api_host }}"
         api_user: "{{ ansible_user }}"
         api_token_secret: "{{ ansible_password }}"
