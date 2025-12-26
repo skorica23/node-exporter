@@ -31,7 +31,7 @@
 
      
     - name: Clone VM from template
-      community.proxmox.proxmox_clone:
+      community.proxmox.proxmox:
         api_host: "{{ proxmox_api_host }}"
         api_user: "avx@pve"  #"{{ proxmox_api_user }}"
         api_token_id: "awx-token" #"{{ proxmox_api_token_id }}"
