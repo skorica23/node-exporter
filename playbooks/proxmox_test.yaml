@@ -41,7 +41,7 @@
         node: "{{ proxmox_node }}"
 #        target: "{{ proxmox_node }}"
         vmid: 8005
-        name: "{{ new_vm_name }}"
+        hostname: "{{ new_vm_name }}"
         full: true
         storage: "{{ storage }}"
         timeout: 300
