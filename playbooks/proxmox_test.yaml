@@ -2,6 +2,13 @@
   hosts: proxmox_api 
   gather_facts: false
   #connection: local
+  
+  vars:
+    #proxmox_host: "pve.example.com"
+    proxmox_node: "prox"
+    template_vmid: 8005
+    new_vm_name: "node-exporter-01"
+    storage: "local-zfs"
 
   tasks:
     - name: Query Proxmox version
@@ -16,3 +23,19 @@
     - name: Show Proxmox info
       debug:
         var: proxmox_info
+
+     
+    - name: Clone VM from template
+      community.proxmox.proxmox_kvm:
+        api_host: "{{ proxmox_host }}"
+        api_user: "{{ proxmox_api_user }}"
+        api_token_id: "{{ proxmox_api_token_id }}"
+        api_token_secret: "{{ proxmox_api_token_secret }}"
+        validate_certs: false
+
+        node: "{{ proxmox_node }}"
+        clone: "{{ template_vmid }}"
+        name: "{{ new_vm_name }}"
+        full: true
+        storage: "{{ storage }}"
+        timeout: 300
