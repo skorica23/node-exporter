@@ -6,7 +6,7 @@
   vars:
     #proxmox_host: "pve.example.com"
     proxmox_node: "prox"
-    template_vmid: 8005
+    #template_vmid: 8005
     new_vm_name: "node-exporter-01"
     storage: "local-zfs"
 
@@ -34,7 +34,7 @@
         validate_certs: false
 
         node: "{{ proxmox_node }}"
-        clone: "{{ template_vmid }}"
+        clone: 8005
         name: "{{ new_vm_name }}"
         full: true
         storage: "{{ storage }}"
