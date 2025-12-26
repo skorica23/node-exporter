@@ -27,10 +27,10 @@
      
     - name: Clone VM from template
       community.proxmox.proxmox_kvm:
-        api_host: "{{ proxmox_host }}"
-        api_user: "{{ proxmox_api_user }}"
-        api_token_id: "{{ proxmox_api_token_id }}"
-        api_token_secret: "{{ proxmox_api_token_secret }}"
+        api_host: "{{ proxmox_api_host }}"
+        api_user: "avx@pve"  #"{{ proxmox_api_user }}"
+        api_token_id: "awx-token" #"{{ proxmox_api_token_id }}"
+        api_token_secret: "{{ ansible_password }}"
         validate_certs: false
 
         node: "{{ proxmox_node }}"
