@@ -9,11 +9,6 @@
     #template_vmid: 8005
     new_vm_name: "node-exporter-01"
     storage: "local-zfs"
-  
-- name: Community proxmox version check
-  run: 
-    ansible-galaxy collection list | grep proxmox
- 
 
   tasks:
     - name: Query Proxmox version
@@ -24,6 +19,10 @@
         api_token_secret: "{{ ansible_password }}"
         validate_certs: false
       register: proxmox_info
+    
+    - name: Community proxmox version check
+      run: 
+        ansible-galaxy collection list | grep proxmox
 
     - name: Show Proxmox info
       debug:
