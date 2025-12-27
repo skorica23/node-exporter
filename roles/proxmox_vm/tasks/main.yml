@@ -1,0 +1,40 @@
+---
+- name: Check if VM already exists
+  community.proxmox.proxmox_kvm:
+    node: "{{ proxmox_node }}"
+    vmid: "{{ vmid }}"
+    state: current
+  register: vm_check
+  failed_when: false
+  changed_when: false
+
+- name: Clone VM from template (static IP)
+  community.proxmox.proxmox_kvm:
+    node: "{{ proxmox_node }}"
+    clone: "{{ template_name }}"
+    vmid: "{{ vmid }}"
+    name: "{{ vm_name }}"
+    full: true
+    storage: "{{ storage }}"
+    ipconfig:
+      ipconfig0: "ip={{ vm_ip }}/{{ vm_cidr }},gw={{ vm_gateway }}"
+    nameserver: "{{ vm_dns }}"
+  when: vm_check.failed
+
+- name: Ensure VM is started
+  community.proxmox.proxmox_kvm:
+    node: "{{ proxmox_node }}"
+    vmid: "{{ vmid }}"
+    state: started
+
+- name: Wait for SSH to become available
+  ansible.builtin.wait_for:
+    host: "{{ vm_ip }}"
+    port: 22
+    timeout: 300
+
+- name: Register VM for next play
+  ansible.builtin.add_host:
+    name: new_vm
+    ansible_host: "{{ vm_ip }}"
+    ansible_user: "{{ ssh_user }}"

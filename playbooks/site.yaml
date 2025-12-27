@@ -1,0 +1,23 @@
+- name: Proxmox API connectivity test
+  hosts: proxmox_api 
+  gather_facts: false
+
+  module_defaults:
+   community.proxmox.proxmox_kvm:
+     api_host: "{{ proxmox_api_host }}"
+     api_user: "{{ proxmox_api_user }}"
+     api_token_id: "{{ proxmox_api_token_id }}"
+     api_token_secret: "{{ proxmox_api_token_secret }}" #"{{ ansible_password }}"
+     validate_certs: false 
+
+  roles:
+   - proxmox_vm
+
+
+- name: Install monitoring agents
+  hosts: new_vm
+  become: true
+  gather_facts: true
+
+  roles:
+    - node_exporter
