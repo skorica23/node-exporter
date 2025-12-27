@@ -31,7 +31,7 @@
 
      
     - name: Clone VM from template
-      community.proxmox.proxmox:
+      community.proxmox.proxmox_clone:
         api_host: "{{ proxmox_api_host }}"
         api_user: "avx@pve"  #"{{ proxmox_api_user }}"
         api_token_id: "awx-token" #"{{ proxmox_api_token_id }}"
@@ -40,6 +40,7 @@
 
         node: "{{ proxmox_node }}"
 #        target: "{{ proxmox_node }}"
+        newid: 2000
         vmid: 8005
         hostname: "{{ new_vm_name }}"
         full: true
