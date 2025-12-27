@@ -6,43 +6,57 @@
   vars:
     #proxmox_host: "pve.example.com"
     proxmox_node: "prox"
-    #template_vmid: 8005
+    new_vmid: 2000
     new_vm_name: "node-exporter-01"
     storage: "local-zfs"
-   
-  tasks:
-    - name: Query Proxmox version
-      community.proxmox.proxmox_node_info:
-        api_host: "{{ proxmox_api_host }}"
-        api_user: "avx@pve"   #"{{ ansible_user }}"
-        api_token_id: "awx-token" #"{{ ansible_user }}"
-        api_token_secret: "{{ ansible_password }}"
-        validate_certs: false
-      register: proxmox_info
+  
+  module_defaults:
+   community.proxmox.proxmox_kvm:
+     api_host: "{{ proxmox_api_host }}"
+     api_user: "avx@pve"
+     api_token_id: "awx-token"
+     api_token_secret: "{{ ansible_password }}"
+     validate_certs: false
+
+  #tasks:
+    # - name: Query Proxmox version
+    #   community.proxmox.proxmox_node_info:
+    #     api_host: "{{ proxmox_api_host }}"
+    #     api_user: "avx@pve"   #"{{ ansible_user }}"
+    #     api_token_id: "awx-token" #"{{ ansible_user }}"
+    #     api_token_secret: "{{ ansible_password }}"
+    #     validate_certs: false
+    #   register: proxmox_info
     
-    - name: Show collection path
-      ansible.builtin.debug:
-        msg: "{{ ansible_collections['community']['proxmox'] | default('not loaded') }}"
+    # - name: Show collection path
+    #   ansible.builtin.debug:
+    #     msg: "{{ ansible_collections['community']['proxmox'] | default('not loaded') }}"
 
 
-    - name: Show Proxmox info
-      debug:
-        var: proxmox_info
+    # - name: Show Proxmox info
+    #   debug:
+    #     var: proxmox_info
 
-     
+  tasks:   
     - name: Clone VM from template
       community.proxmox.proxmox_kvm:
-        api_host: "{{ proxmox_api_host }}"
-        api_user: "avx@pve"  #"{{ proxmox_api_user }}"
-        api_token_id: "awx-token" #"{{ proxmox_api_token_id }}"
-        api_token_secret: "{{ ansible_password }}"
-        validate_certs: false
+        # api_host: "{{ proxmox_api_host }}"
+        # api_user: "avx@pve"  #"{{ proxmox_api_user }}"
+        # api_token_id: "awx-token" #"{{ proxmox_api_token_id }}"
+        # api_token_secret: "{{ ansible_password }}"
+        # validate_certs: false
 
         node: "{{ proxmox_node }}"
         clone: openSuse-Leap-15.6-cloudinit-template
-        newid: 2000
+        vmid: "{{ new_vmid }}"
         #vmid: 8005
         name: "{{ new_vm_name }}"
         full: true
         storage: "{{ storage }}"
         timeout: 300
+    
+    - name: Start VM 2000
+      community.proxmox.proxmox_kvm:
+        node: "{{ proxmox_node }}"
+        vmid: "{{ new_vmid }}"
+        state: started
