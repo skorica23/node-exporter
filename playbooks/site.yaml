@@ -11,7 +11,7 @@
      validate_certs: false 
 
   roles:
-   - proxmox_vm
+    - proxmox_vm
 
 
 - name: Install monitoring agents
