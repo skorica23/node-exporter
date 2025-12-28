@@ -1,7 +1,7 @@
 proxmox_node: prox
 template_name:  openSuse-Leap-15.6-cloudinit-template
 
-vmid: 2000
+#vmid: 2000
 vm_name: node-exporter-01
 
 vm_ip: 10.30.30.12
