@@ -1,7 +1,12 @@
 ---
 - name: Run a command
-  ansible.builtin.command:
-    cmd: whoami
+  ansible.builtin.command: whoami
+  register: whoami_result
+
+- debug:
+    msg: "Ansible is running as user: {{ whoami_result.stdout }}"
+    ssh_user: "{{ ansible_user }}"
+    effective_user: "{{ ansible_effective_user_id | default('unknown') }}"
 
 - name: Create node_exporter user
   ansible.builtin.user:
