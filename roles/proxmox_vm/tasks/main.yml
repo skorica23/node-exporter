@@ -7,7 +7,7 @@
 
 - name: Set VM existence fact
   ansible.builtin.set_fact:
-    vm_exists: "{{ proxmox_vms.vms | selectattr('vmid', 'equalto', vmid | int) | list | length > 0 }}"
+    vm_exists: "{{ proxmox_vms | selectattr('vmid', 'equalto', vmid | int) | list | length > 0 }}"
 
 # - name: Check if VM already exists
 #   community.proxmox.proxmox_kvm:
