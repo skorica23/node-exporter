@@ -28,6 +28,17 @@
 #   register: vm_check
 #   failed_when: false
 #   changed_when: false
+- name: Debug clone inputs
+  debug:
+    msg:
+      proxmox_node: "{{ proxmox_node }}"
+      template_name: "{{ template_name }}"
+      vm_name: "{{ vm_name }}"
+      storage: "{{ storage }}"
+      vm_ip: "{{ vm_ip }}"
+      vm_cidr: "{{ vm_cidr }}"
+      vm_gateway: "{{ vm_gateway }}"
+      vm_exists: "{{ vm_exists }}"
 
 - name: Clone VM from template (static IP)
   community.proxmox.proxmox_kvm:
@@ -39,8 +50,15 @@
     storage: "{{ storage }}"
     ipconfig:
       ipconfig0: "ip={{ vm_ip }}/{{ vm_cidr }},gw={{ vm_gateway }}"
-    nameservers: "{{ vm_dns }}"
+   # nameservers: "{{ vm_dns }}"
   when: not vm_exists
+  register: clone_result
+
+- name: Debug proxmox_vm_info output
+  debug:
+    var: clone_result
+
+
 
 - name: Ensure VM is started
   community.proxmox.proxmox_kvm:
