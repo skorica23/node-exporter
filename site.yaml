@@ -24,7 +24,9 @@
 
 - name: Install monitoring agents
   hosts: new_vm
-  become: true
+  become: true  
+  become_user: root #define which user to become
+  ansible_sudo_executable: /usr/bin/sudo  # path to sudo
   gather_facts: true
 
   roles:
