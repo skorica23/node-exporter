@@ -1,13 +1,13 @@
 ---
 
-# - name: Gather VM info
-#   community.proxmox.proxmox_vm_info:
-#     #node: "{{ proxmox_node }}"
-#   register: proxmox_vms
-
-- name: Check kvm output
-  community.proxmox.proxmox_kvm:
+- name: Gather VM info
+  community.proxmox.proxmox_vm_info:
+    node: "{{ proxmox_node }}"
   register: proxmox_vms
+
+# - name: Check kvm output
+#   community.proxmox.proxmox_kvm:
+#   register: proxmox_vms
 
 - name: Debug proxmox_vm_info output
   ansible.builtin.debug:
@@ -18,7 +18,7 @@
    
 - name: Set VM existence fact
   ansible.builtin.set_fact:
-    vm_exists: "{{ proxmox_vms.vms | selectattr('vmid', 'equalto', vmid | int) | list | length > 0 }}"
+    vm_exists: "{{ proxmox_vms.proxmox_vms | selectattr('vmid', 'equalto', vmid | int) | list | length > 0 }}"
 
 # - name: Check if VM already exists
 #   community.proxmox.proxmox_kvm:
