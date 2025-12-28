@@ -1,7 +1,7 @@
 ---
 - name: Run a command
-      ansible.builtin.command:
-        cmd: whoami
+  ansible.builtin.command:
+    cmd: whoami
 
 - name: Create node_exporter user
   ansible.builtin.user:
