@@ -1,12 +1,22 @@
 ---
-- name: Check if VM already exists
-  community.proxmox.proxmox_kvm:
+
+- name: Gather VM info
+  community.proxmox.proxmox_vm_info:
     node: "{{ proxmox_node }}"
-    vmid: "{{ vmid }}"
-    state: current
-  register: vm_check
-  failed_when: false
-  changed_when: false
+  register: proxmox_vms
+
+- name: Set VM existence fact
+  ansible.builtin.set_fact:
+    vm_exists: "{{ proxmox_vms.vms | selectattr('vmid', 'equalto', vmid | int) | list | length > 0 }}"
+
+# - name: Check if VM already exists
+#   community.proxmox.proxmox_kvm:
+#     node: "{{ proxmox_node }}"
+#     vmid: "{{ vmid }}"
+#     state: current
+#   register: vm_check
+#   failed_when: false
+#   changed_when: false
 
 - name: Clone VM from template (static IP)
   community.proxmox.proxmox_kvm:
@@ -19,7 +29,7 @@
     ipconfig:
       ipconfig0: "ip={{ vm_ip }}/{{ vm_cidr }},gw={{ vm_gateway }}"
     nameserver: "{{ vm_dns }}"
-  when: vm_check.failed
+  when: not vm_exists
 
 - name: Ensure VM is started
   community.proxmox.proxmox_kvm:
