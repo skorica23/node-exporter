@@ -33,7 +33,7 @@
   community.proxmox.proxmox_kvm:
     node: "{{ proxmox_node }}"
     clone: "{{ template_name }}"
-    vmid: "{{ vmid }}"
+    #vmid: "{{ vmid }}"
     name: "{{ vm_name }}"
     full: true
     storage: "{{ storage }}"
