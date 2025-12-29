@@ -76,6 +76,16 @@
     port: 22
     timeout: 300
 
+
+- name: Debug registration values
+  ansible.builtin.debug:
+    msg: |
+      Registering new VM with the following details:
+      - VM Name: "{{ vm_name }}"
+      - VM IP: "{{ vm_ip }}"
+      - Ansible User: "{{ ansible_user }}"
+      - Ansible Shell Executable: "{{ ansible_shell_executable }}"
+
 - name: Register VM for next play
   ansible.builtin.add_host:
     name: "{{ vm_name }}"

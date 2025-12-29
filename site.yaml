@@ -34,7 +34,7 @@
   
 
 - name: Install monitoring agents
-  hosts: 10.30.30.12
+  hosts: new_vm
   gather_facts: false
   become: true
   # become_method: sudo
@@ -47,14 +47,21 @@
     ansible_shell_executable: /bin/sh
 
   tasks:
+    - name: Print registered hosts
+      ansible.builtin.debug:
+        var: hostvars[inventory_hostname]
+      when: inventory_hostname in groups['new_vm']
+      ignore_errors: true
+
     - name: Test - verify we can become root
       ansible.builtin.raw: /usr/bin/sudo whoami
       register: sudo_test
-      
+      ignore_errors: true
+              
     - name: Show sudo test result
       ansible.builtin.debug:
         msg: "Sudo test: {{ sudo_test.stdout }}"
-
+      ignore_errors: true
 # - name: Debug sudo privileges
 #   hosts: new_vm
 #   gather_facts: false
