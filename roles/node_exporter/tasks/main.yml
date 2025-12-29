@@ -8,14 +8,28 @@
     #ssh_user: "{{ ansible_user }}"
     #effective_user: "{{ ansible_effective_user_id | default('unknown') }}"
 
+# node_exporter/tasks/main.yml
 - name: Create node_exporter user
   ansible.builtin.user:
     name: "{{ node_exporter_user }}"
     shell: /usr/sbin/nologin
     system: true
+    create_home: false
   become: true
   become_method: sudo
   become_user: root
+  become_flags: '-H -S -n'
+
+
+
+# - name: Create node_exporter user
+#   ansible.builtin.user:
+#     name: "{{ node_exporter_user }}"
+#     shell: /usr/sbin/nologin
+#     system: true
+#   become: true
+#   become_method: sudo
+#   become_user: root
 
 - name: Download node_exporter tarball
   ansible.builtin.get_url:

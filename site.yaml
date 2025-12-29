@@ -21,16 +21,16 @@
   roles:
     - proxmox_vm
 
-- name: Bootstrap sudo
-  hosts: new_vm
-  gather_facts: false
-  become: true
-  become_method: su
-  tasks:
-    - name: Install sudo
-      ansible.builtin.package:
-        name: sudo
-        state: present
+# - name: Bootstrap sudo
+#   hosts: new_vm
+#   gather_facts: false
+#   become: true
+#   become_method: su
+#   tasks:
+#     - name: Install sudo
+#       ansible.builtin.package:
+#         name: sudo
+#         state: present
   
 
 - name: Install monitoring agents
