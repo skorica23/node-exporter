@@ -22,7 +22,7 @@
 
 - name: Set VM existence fact
   ansible.builtin.set_fact:
-    existing_vm:: "{{ proxmox_vms.proxmox_vms | selectattr('name', 'equalto', vm_name ) | list }}"
+    existing_vm: "{{ proxmox_vms.proxmox_vms | selectattr('name', 'equalto', vm_name ) | list }}"
 
 
 - name: Set vm_exists and vmid if present
