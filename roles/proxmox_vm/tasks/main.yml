@@ -52,7 +52,7 @@
   debug:
     msg:
       proxmox_node: "{{ proxmox_node }}"
-      template_name: "{{ template_id }}"
+      template_name: "{{ template_name }}"
       vm_name: "{{ vm_name }}"
       storage: "{{ storage }}"
       vm_ip: "{{ vm_ip }}"
@@ -63,7 +63,7 @@
 - name: Clone VM from template (static IP)
   community.proxmox.proxmox_kvm:
     node: "{{ proxmox_node }}"
-    clone: "{{ template_id }}"
+    clone: "{{ template_name }}"
     #vmid: "{{ vmid }}"
     name: "{{ vm_name }}"
     full: true
