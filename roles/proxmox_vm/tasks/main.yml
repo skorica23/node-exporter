@@ -70,7 +70,12 @@
   when: not vm_exists
   register: clone_result
   
+- name: Set vmid from clone result
+  set_fact:
+    vmid: "{{ clone_result.vmid }}"
+  when: not vm_exists
 
+  
 - name: Debug proxmox_vm_info output
   debug:
     var: clone_result
