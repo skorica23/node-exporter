@@ -25,6 +25,7 @@
 - name: Install monitoring agents
   hosts: new_vm
   gather_facts: true
+  become: true
   become_method: sudo
 
 - name: Debug resolved inventory
@@ -36,7 +37,7 @@
           inventory_hostname: "{{ inventory_hostname }}"
           ansible_host: "{{ ansible_host }}"
           ansible_user: "{{ ansible_user }}"  
-
-
+  
+  
   roles:
     - node_exporter
