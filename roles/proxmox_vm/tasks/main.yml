@@ -58,7 +58,11 @@
   debug:
     var: clone_result
 
-
+- name: Apply cloud-init config
+  community.proxmox.proxmox_kvm:
+    node: "{{ proxmox_node }}"
+    name: "{{ vm_name }}"
+    update: true
 
 - name: Ensure VM is started
   community.proxmox.proxmox_kvm:
@@ -75,5 +79,6 @@
 - name: Register VM for next play
   ansible.builtin.add_host:
     name: new_vm
+    groups: new_vm
     ansible_host: "{{ vm_ip }}"
-    ansible_user: "{{ ssh_user }}"
+    ansible_user: root
