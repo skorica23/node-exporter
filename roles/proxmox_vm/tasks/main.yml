@@ -96,12 +96,18 @@
     node: "{{ proxmox_node }}"
     name: "{{ vm_name }}"
     update: true
+  
 
 - name: Ensure VM is started
   community.proxmox.proxmox_kvm:
     node: "{{ proxmox_node }}"
-    vmid: "{{ vm_name }}"
+    vmid: "{{ vmid }}"
     state: started
+  register: vm_start_var
+
+- name: Debug proxmox_vm_info output
+  debug:
+    var: vm_start_var
 
 - name: Wait for SSH to become available
   ansible.builtin.wait_for:
