@@ -52,6 +52,7 @@
       become: true
       become_method: sudo
       register: sudo_user
+      ignore_errors: true
       
     - name: Test sudo directly
       ansible.builtin.shell: sudo whoami
