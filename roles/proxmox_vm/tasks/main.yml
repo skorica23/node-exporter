@@ -1,9 +1,9 @@
 ---
 
-# - name: Gather VM info
-#   community.proxmox.proxmox_vm_info:
-#     node: "{{ proxmox_node }}"
-#   register: proxmox_vms
+- name: Gather VM info
+  community.proxmox.proxmox_vm_info:
+    node: "{{ proxmox_node }}"
+  register: proxmox_vms
 
 # - name: Check kvm output
 #   community.proxmox.proxmox_kvm:
@@ -26,8 +26,7 @@
 
 - name: Debug VM existence
   debug:
-    msg:
-      var: existing_vm
+     var: existing_vm
 
 
 - name: Set vm_exists and vmid if present
