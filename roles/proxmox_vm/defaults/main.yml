@@ -1,10 +1,10 @@
 proxmox_node: prox
-template_name:  openSuse-Leap-15.6-cloudinit-template
+template_name: ubuntu-2404-cloudinit-template  #openSuse-Leap-15.6-cloudinit-template
 
-vmid: 105
-vm_name: node-exporter-01
+vmid: 106
+vm_name: node-exporter-02
 
-vm_ip:  10.30.30.12
+vm_ip:  10.30.30.13
 vm_cidr: 24
 vm_gateway: 10.30.30.1
 vm_dns: 1.1.1.1
