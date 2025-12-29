@@ -57,6 +57,7 @@
     - name: Test sudo directly
       ansible.builtin.shell: sudo whoami
       register: sudo_test
+      ignore_errors: true
       
     - name: Display results
       ansible.builtin.debug:
