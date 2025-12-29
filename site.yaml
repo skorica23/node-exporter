@@ -24,7 +24,7 @@
 
 - name: Install monitoring agents
   hosts: new_vm
-  become: true  
+  become: false  
   #become_user: root #define which user to become
   gather_facts: true
 
