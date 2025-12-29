@@ -1,9 +1,9 @@
 ---
 
-- name: Gather VM info
-  community.proxmox.proxmox_vm_info:
-    node: "{{ proxmox_node }}"
-  register: proxmox_vms
+# - name: Gather VM info
+#   community.proxmox.proxmox_vm_info:
+#     node: "{{ proxmox_node }}"
+#   register: proxmox_vms
 
 # - name: Check kvm output
 #   community.proxmox.proxmox_kvm:
@@ -15,19 +15,34 @@
 
 # - name: Check kvm output
 #   community.proxmox.proxmox_kvm:
-   
+- name: Get list of VMs on node
+  community.proxmox.proxmox_vm_info:
+    node: "{{ proxmox_node }}"
+  register: proxmox_vms
+
 - name: Set VM existence fact
   ansible.builtin.set_fact:
-    vm_exists: "{{ proxmox_vms.proxmox_vms | selectattr('vmid', 'equalto', vmid | int) | list | length > 0 }}"
+    existing_vm:: "{{ proxmox_vms.proxmox_vms | selectattr('name', 'equalto', vm_name ) | list }}"
+
+
+- name: Set vm_exists and vmid if present
+  set_fact:
+    vm_exists: "{{ existing_vm | length > 0 }}"
+    vmid: "{{ existing_vm[0].vmid | default(omit) }}"
+
 
 - name: Check if VM already exists
   community.proxmox.proxmox_kvm:
     node: "{{ proxmox_node }}"
     vmid: "{{ vmid }}"
     state: current
-  register: vm_check
-  failed_when: false
-  changed_when: false
+  # register: vm_check
+  # failed_when: false
+  # changed_when: false
+
+- name: Set vm_exists fact
+  set_fact:
+    vm_exists: "{{ not vm_check.failed }}"
 
 - name: Debug clone inputs
   debug:
@@ -44,8 +59,8 @@
 - name: Clone VM from template (static IP)
   community.proxmox.proxmox_kvm:
     node: "{{ proxmox_node }}"
-    clone: "{{ template_name }}"
-    vmid: "{{ vmid }}"
+    clone: "{{ template_id }}"
+    #vmid: "{{ vmid }}"
     name: "{{ vm_name }}"
     full: true
     storage: "{{ storage }}"
@@ -54,7 +69,7 @@
    # nameservers: "{{ vm_dns }}"
   when: not vm_exists
   register: clone_result
-  ignore_errors: true
+  
 
 - name: Debug proxmox_vm_info output
   debug:
