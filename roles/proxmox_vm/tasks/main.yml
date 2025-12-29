@@ -78,7 +78,7 @@
 
 - name: Register VM for next play
   ansible.builtin.add_host:
-    name: new_vm
+    name: "{{ vm_name }}"
     groups: new_vm
     ansible_host: "{{ vm_ip }}"
     ansible_user: root
