@@ -52,12 +52,42 @@
         var: hostvars[inventory_hostname]
       when: inventory_hostname in groups['new_vm']
       ignore_errors: true
+    
+    - name: Print PATH variable
+      ansible.builtin.command: echo $PATH
+      register: path_output
 
+    - name: Show PATH variable
+      ansible.builtin.debug:
+        msg: "Current PATH: {{ path_output.stdout }}"
+      ignore_errors: true
+      
     - name: Test - verify we can become root
       ansible.builtin.raw: /usr/bin/sudo whoami
       register: sudo_test
       ignore_errors: true
               
+    - name: Show sudo test result
+      ansible.builtin.debug:
+        msg: "Sudo test: {{ sudo_test.stdout }}"
+      ignore_errors: true
+
+    - name: Check if sudo exists
+      ansible.builtin.command: which sudo
+      register: sudo_check
+      ignore_errors: true
+
+    - name: Show sudo existence check
+      ansible.builtin.debug:
+        msg: "Sudo is located at: {{ sudo_check.stdout }}"
+      ignore_errors: true
+
+
+    - name: Verify we can become root
+      ansible.builtin.shell: /usr/bin/sudo whoami
+      register: sudo_test
+      ignore_errors: true
+    
     - name: Show sudo test result
       ansible.builtin.debug:
         msg: "Sudo test: {{ sudo_test.stdout }}"
