@@ -81,4 +81,4 @@
     name: "{{ vm_name }}"
     groups: new_vm
     ansible_host: "{{ vm_ip }}"
-    ansible_user: root
+    ansible_user: test_1

@@ -24,9 +24,8 @@
 
 - name: Install monitoring agents
   hosts: new_vm
-  become: false  
-  #become_user: root #define which user to become
   gather_facts: true
+  become_method: sudo
 
 - name: Debug resolved inventory
   hosts: new_vm
