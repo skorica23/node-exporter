@@ -13,7 +13,9 @@
     name: "{{ node_exporter_user }}"
     shell: /usr/sbin/nologin
     system: true
-  #become: true
+  become: true
+  become_method: sudo
+  become_user: root
 
 - name: Download node_exporter tarball
   ansible.builtin.get_url:

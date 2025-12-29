@@ -41,3 +41,30 @@
   
   roles:
     - node_exporter
+
+- name: Debug sudo privileges
+  hosts: new_vm
+  gather_facts: false
+  tasks:
+    - name: Check current user (no sudo)
+      ansible.builtin.command: whoami
+      register: current_user
+      
+    - name: Check effective user with become
+      ansible.builtin.command: whoami
+      become: true
+      become_method: sudo
+      register: sudo_user
+      
+    - name: Test sudo directly
+      ansible.builtin.shell: sudo whoami
+      register: sudo_test
+      
+    - name: Display results
+      ansible.builtin.debug:
+        msg:
+          - "Current user: {{ current_user.stdout }}"
+          - "User with become: {{ sudo_user.stdout }}"
+          - "Direct sudo: {{ sudo_test.stdout }}"
+          - "Ansible become: {{ ansible_become }}"
+          - "Ansible become method: {{ ansible_become_method }}"
