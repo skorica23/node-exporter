@@ -75,10 +75,17 @@
     vmid: "{{ clone_result.vmid }}"
   when: not vm_exists
 
-  
+
 - name: Debug proxmox_vm_info output
   debug:
     var: clone_result
+
+- name: Debug VM identity
+  debug:
+    msg:
+      vm_exists: "{{ vm_exists }}"
+      vmid: "{{ vmid }}"
+      vm_name: "{{ vm_name }}"
 
 - name: Apply cloud-init config
   community.proxmox.proxmox_kvm:
