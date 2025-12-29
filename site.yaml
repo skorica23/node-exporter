@@ -24,7 +24,7 @@
 
 - name: Install monitoring agents
   hosts: new_vm
-  gather_facts: true
+  gather_facts: false
   become: true
   become_method: sudo
 
