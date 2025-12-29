@@ -37,7 +37,7 @@
   hosts: new_vm
   gather_facts: false
   become: true
-  become_method: su
+  become_method: sudo
 
 - name: Debug sudo privileges
   hosts: new_vm
