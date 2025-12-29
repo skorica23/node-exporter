@@ -35,11 +35,11 @@
     vmid: "{{ existing_vm[0].vmid | default(omit) }}"
 
 
-- name: Check if VM already exists
-  community.proxmox.proxmox_kvm:
-    node: "{{ proxmox_node }}"
-    vmid: "{{ vmid }}"
-    state: current
+# - name: Check if VM already exists
+#   community.proxmox.proxmox_kvm:
+#     node: "{{ proxmox_node }}"
+#     vmid: "{{ vmid }}"
+#     state: current
   # register: vm_check
   # failed_when: false
   # changed_when: false
