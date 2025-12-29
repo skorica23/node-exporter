@@ -37,8 +37,8 @@
   hosts: new_vm
   gather_facts: false
   become: true
-  become_method: sudo
-  become_exe: /var/bin/sudo
+  # become_method: sudo
+  # become_exe: /var/bin/sudo
   vars:
     # Force Ansible to use full path to sudo
     ansible_become_exe: /usr/bin/sudo

@@ -82,4 +82,6 @@
     groups: new_vm
     ansible_host: "{{ vm_ip }}"
     ansible_user: test_1
+    #ansible_shell_executable: /bin/bash  # <-- ADD THIS
+    ansible_user: test_1
     ansible_shell_executable: /bin/bash  # <-- ADD THIS
