@@ -39,34 +39,34 @@
   become: true
   become_method: sudo
 
-- name: Debug sudo privileges
-  hosts: new_vm
-  gather_facts: false
-  tasks:
-    - name: Check current user (no sudo)
-      ansible.builtin.command: whoami
-      register: current_user
+# - name: Debug sudo privileges
+#   hosts: new_vm
+#   gather_facts: false
+#   tasks:
+#     - name: Check current user (no sudo)
+#       ansible.builtin.command: whoami
+#       register: current_user
       
-    - name: Check effective user with become
-      ansible.builtin.command: whoami
-      become: true
-      become_method: sudo
-      register: sudo_user
-      ignore_errors: true
+#     - name: Check effective user with become
+#       ansible.builtin.command: whoami
+#       become: true
+#       become_method: sudo
+#       register: sudo_user
+#       ignore_errors: true
       
-    - name: Test sudo directly
-      ansible.builtin.shell: sudo whoami
-      register: sudo_test
-      ignore_errors: true
-      
-    - name: Display results
-      ansible.builtin.debug:
-        msg:
-          - "Current user: {{ current_user.stdout }}"
-          - "User with become: {{ sudo_user.stdout }}"
-          - "Direct sudo: {{ sudo_test.stdout }}"
-          - "Ansible become: {{ ansible_become }}"
-          - "Ansible become method: {{ ansible_become_method }}"
+#     - name: Test sudo directly
+#       ansible.builtin.shell: sudo whoami
+#       register: sudo_test
+#       ignore_errors: true
+
+#     - name: Display results
+#       ansible.builtin.debug:
+#         msg:
+#           - "Current user: {{ current_user.stdout }}"
+#           - "User with become: {{ sudo_user.stdout }}"
+#           - "Direct sudo: {{ sudo_test.stdout }}"
+#           - "Ansible become: {{ ansible_become }}"
+#           - "Ansible become method: {{ ansible_become_method }}"
 
 - name: Debug resolved inventory
   hosts: new_vm
