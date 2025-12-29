@@ -100,7 +100,7 @@
 - name: Ensure VM is started
   community.proxmox.proxmox_kvm:
     node: "{{ proxmox_node }}"
-    vmid: "{{ vmid }}"
+    vmid: "{{ vm_name }}"
     state: started
 
 - name: Wait for SSH to become available
