@@ -20,14 +20,15 @@
   ansible.builtin.set_fact:
     vm_exists: "{{ proxmox_vms.proxmox_vms | selectattr('vmid', 'equalto', vmid | int) | list | length > 0 }}"
 
-# - name: Check if VM already exists
-#   community.proxmox.proxmox_kvm:
-#     node: "{{ proxmox_node }}"
-#     vmid: "{{ vmid }}"
-#     state: current
-#   register: vm_check
-#   failed_when: false
-#   changed_when: false
+- name: Check if VM already exists
+  community.proxmox.proxmox_kvm:
+    node: "{{ proxmox_node }}"
+    vmid: "{{ vmid }}"
+    state: current
+  register: vm_check
+  failed_when: false
+  changed_when: false
+
 - name: Debug clone inputs
   debug:
     msg:
@@ -44,7 +45,7 @@
   community.proxmox.proxmox_kvm:
     node: "{{ proxmox_node }}"
     clone: "{{ template_name }}"
-    #vmid: "{{ vmid }}"
+    vmid: "{{ vmid }}"
     name: "{{ vm_name }}"
     full: true
     storage: "{{ storage }}"
