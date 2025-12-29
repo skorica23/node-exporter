@@ -54,6 +54,7 @@
    # nameservers: "{{ vm_dns }}"
   when: not vm_exists
   register: clone_result
+  ignore_errors: true
 
 - name: Debug proxmox_vm_info output
   debug:
