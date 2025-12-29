@@ -44,7 +44,7 @@
     ansible_become_exe: /usr/bin/sudo
     ansible_become_method: sudo
     ansible_become_flags: '-H -S -n'
-    ansible_shell_executable: /bin/sh`
+    ansible_shell_executable: /bin/sh
 
   tasks:
     - name: Test - verify we can become root
