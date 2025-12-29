@@ -94,4 +94,4 @@
     ansible_user: test_1
     #ansible_shell_executable: /bin/bash  # <-- ADD THIS
     ansible_user: test_1
-    ansible_shell_executable: /bin/sh  # <-- ADD THIS
+    ansible_shell_executable: /bin/bash  # <-- ADD THIS

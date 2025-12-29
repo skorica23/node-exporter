@@ -44,7 +44,7 @@
     ansible_become_exe: /usr/bin/sudo
     ansible_become_method: sudo
     ansible_become_flags: '-H -S -n'
-    ansible_shell_executable: /bin/sh
+    ansible_shell_executable: /bin/bash
 
   tasks:
     - name: Print registered hosts
@@ -62,7 +62,12 @@
       ansible.builtin.debug:
         msg: "Current PATH: {{ path_output.stdout }}"
       ignore_errors: true
-
+    
+    - name: Show PATH variable
+      ansible.builtin.debug:
+        msg: "Current PATH: {{ path_output.stdout | default('not accessible') }}"
+      ignore_errors: true
+    
     - name: Test - verify we can become root
       ansible.builtin.raw: /usr/bin/sudo whoami
       register: sudo_test
