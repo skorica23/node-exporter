@@ -38,6 +38,9 @@
   gather_facts: false
   become: true
   become_method: sudo
+  become_exe: /var/bin/sudo
+  vars:
+    ansible_shell_executable: /bin/bash
 
 # - name: Debug sudo privileges
 #   hosts: new_vm
