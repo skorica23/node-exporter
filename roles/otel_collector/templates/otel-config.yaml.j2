@@ -60,16 +60,19 @@ exporters:
     sampling_initial: 5
     sampling_thereafter: 200
 
-# Uncomment if using basic auth for Prometheus
-# extensions:
-#   basicauth:
-#     client_auth:
-#       username: {{ prometheus_remote_write_username }}
-#       password: {{ prometheus_remote_write_password }}
+{#
+ Uncomment if using basic auth for Prometheus
+ extensions:
+   basicauth:
+     client_auth:
+       username: {{ prometheus_remote_write_username }}
+       password: {{ prometheus_remote_write_password }}
+#}
 
 service:
+  
   # Uncomment if using basic auth
-  # extensions: [basicauth]  
+  # extensions: [basicauth] 
   pipelines:
     metrics:
       receivers: [prometheus]
