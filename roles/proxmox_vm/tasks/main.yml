@@ -130,7 +130,9 @@
     name: "{{ vm_name }}"
     groups: new_vm
     ansible_host: "{{ vm_ip }}"
-    ansible_user: test_1
-    #ansible_shell_executable: /bin/bash  # <-- ADD THIS
-    ansible_user: test_1
+    ansible_user: test_1     
     ansible_shell_executable: /bin/bash  # <-- ADD THIS
+    ansible_connection: ssh  # FORCE SSH
+    ansible_shell_executable: /bin/bash
+    ansible_become_exe: /usr/bin/sudo
+    ansible_ssh_private_key_file: "{{ lookup('env', 'AWX_PRIVATE_KEY_PATH') | default(omit) }}"
