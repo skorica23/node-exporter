@@ -136,4 +136,4 @@
     ansible_shell_executable: /bin/bash
     ansible_become_exe: /usr/bin/sudo
     ansible_ssh_private_key_file: "{{ lookup('env', 'AWX_PRIVATE_KEY_PATH') | default(omit) }}"
-    ansible_python_interpreter: /var/bin/python3 # set python version
+    ansible_python_interpreter: /usr/bin/python3 # set python version
