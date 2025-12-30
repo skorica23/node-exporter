@@ -1,0 +1,76 @@
+---
+# roles/otel_collector/tasks/main.yml
+
+- name: Create otel_collector user
+  ansible.builtin.user:
+    name: "{{ otel_user }}"
+    shell: /usr/sbin/nologin
+    system: true
+    create_home: false
+
+- name: Download OpenTelemetry Collector
+  ansible.builtin.command:
+    cmd: >
+      curl -L -o /tmp/otelcol-contrib_{{ otel_version }}_linux_amd64.tar.gz
+      https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v{{ otel_version }}/otelcol-contrib_{{ otel_version }}_linux_amd64.tar.gz
+    creates: /tmp/otelcol-contrib_{{ otel_version }}_linux_amd64.tar.gz
+  retries: 3
+  delay: 5
+
+- name: Create OTel directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ otel_user }}"
+    group: "{{ otel_group }}"
+    mode: '0755'
+  loop:
+    - "{{ otel_config_dir }}"
+    - "{{ otel_data_dir }}"
+    - /tmp/otelcol-extract
+
+- name: Extract OTel Collector
+  ansible.builtin.unarchive:
+    src: /tmp/otelcol-contrib_{{ otel_version }}_linux_amd64.tar.gz
+    dest: /tmp/otelcol-extract
+    remote_src: true
+
+- name: Copy OTel binary to /usr/local/bin
+  ansible.builtin.copy:
+    src: /tmp/otelcol-extract/otelcol-contrib
+    dest: /usr/local/bin/otelcol-contrib
+    owner: "{{ otel_user }}"
+    group: "{{ otel_group }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Create OTel Collector config
+  ansible.builtin.template:
+    src: otel-config.yaml.j2
+    dest: "{{ otel_config_dir }}/config.yaml"
+    owner: "{{ otel_user }}"
+    group: "{{ otel_group }}"
+    mode: '0644'
+  notify: restart otel_collector
+
+- name: Create systemd service file
+  ansible.builtin.template:
+    src: otel-collector.service.j2
+    dest: /etc/systemd/system/otel-collector.service
+    mode: '0644'
+  notify: restart otel_collector
+
+- name: Enable and start OTel Collector
+  ansible.builtin.systemd:
+    name: otel-collector
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Cleanup temporary files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/otelcol-contrib_{{ otel_version }}_linux_amd64.tar.gz
+    - /tmp/otelcol-extract

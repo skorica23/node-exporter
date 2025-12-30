@@ -1,0 +1,28 @@
+---
+# roles/otel_collector/defaults/main.yml
+
+otel_version: "0.115.1"
+otel_user: otelcol
+otel_group: otelcol
+otel_config_dir: /etc/otelcol-contrib
+otel_data_dir: /var/lib/otelcol-contrib
+
+# Node Exporter endpoint to scrape
+node_exporter_endpoint: "localhost:9100"
+
+# OTLP endpoint (where to send metrics)
+# IMPORTANT: Change this to your actual OTLP endpoint!
+# otlp_endpoint: "your-otlp-endpoint:4317"
+# otlp_insecure: true  # Set to false for production with TLS
+
+# Prometheus Remote Write endpoint (RKE2 cluster)
+# This is where metrics will be sent via Prometheus remote_write protocol
+prometheus_remote_write_endpoint: "http://prometheus.rke2-cluster.local:9090/api/v1/write"
+
+# Authentication for Prometheus (optional, uncomment if needed)
+# prometheus_remote_write_username: "admin"
+# prometheus_remote_write_password: "password"
+
+# Additional labels to add to all metrics
+cluster_name: "management-rke2"
+datacenter: "dc1"
