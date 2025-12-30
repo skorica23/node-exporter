@@ -21,6 +21,64 @@
   # become_flags: '-H -S -n'
 
 
+- name: Download node_exporter tarball using curl (bypass Python issue)
+  ansible.builtin.command:
+    cmd: >
+      curl -L -o /tmp/node_exporter-{{ node_exporter_version }}.tar.gz
+      https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+    creates: /tmp/node_exporter-{{ node_exporter_version }}.tar.gz
+  register: download_result
+  retries: 3
+  delay: 5
+  until: download_result is succeeded
+
+- name: Create extraction directory
+  ansible.builtin.file:
+    path: /tmp/node_exporter-{{ node_exporter_version }}
+    state: directory
+    mode: '0755'
+
+- name: Extract node_exporter tarball
+  ansible.builtin.unarchive:
+    src: /tmp/node_exporter-{{ node_exporter_version }}.tar.gz
+    dest: /tmp/node_exporter-{{ node_exporter_version }}
+    remote_src: true
+    extra_opts: [--strip-components=1]
+
+- name: Copy node_exporter binary to /usr/local/bin
+  ansible.builtin.copy:
+    src: /tmp/node_exporter-{{ node_exporter_version }}/node_exporter
+    dest: /usr/local/bin/node_exporter
+    owner: "{{ node_exporter_user }}"
+    group: "{{ node_exporter_user }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Create systemd service file
+  ansible.builtin.template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+    mode: '0644'
+  notify: restart node_exporter
+
+- name: Enable and start node_exporter service
+  ansible.builtin.systemd:
+    name: node_exporter
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Cleanup temporary files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/node_exporter-{{ node_exporter_version }}.tar.gz
+    - /tmp/node_exporter-{{ node_exporter_version }}
+
+
+
+
 
 # - name: Create node_exporter user
 #   ansible.builtin.user:
@@ -31,45 +89,45 @@
 #   become_method: sudo
 #   become_user: root
 
-- name: Download node_exporter tarball
-  ansible.builtin.get_url:
-    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
-    dest: /tmp/node_exporter.tar.gz
-    mode: '0644'
+# - name: Download node_exporter tarball
+#   ansible.builtin.get_url:
+#     url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+#     dest: /tmp/node_exporter.tar.gz
+#     mode: '0644'
 
-- name: Extract node_exporter
-  ansible.builtin.unarchive:
-    src: /tmp/node_exporter.tar.gz
-    dest: /tmp
-    remote_src: true
+# - name: Extract node_exporter
+#   ansible.builtin.unarchive:
+#     src: /tmp/node_exporter.tar.gz
+#     dest: /tmp
+#     remote_src: true
 
-- name: Install node_exporter binary
-  ansible.builtin.copy:
-    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
-    dest: /usr/local/bin/node_exporter
-    owner: "{{ node_exporter_user }}"
-    group: "{{ node_exporter_user }}"
-    mode: '0755'
+# - name: Install node_exporter binary
+#   ansible.builtin.copy:
+#     src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
+#     dest: /usr/local/bin/node_exporter
+#     owner: "{{ node_exporter_user }}"
+#     group: "{{ node_exporter_user }}"
+#     mode: '0755'
 
-- name: Create systemd service
-  ansible.builtin.copy:
-    dest: /etc/systemd/system/node_exporter.service
-    content: |
-      [Unit]
-      Description=Prometheus Node Exporter
-      Wants=network-online.target
-      After=network-online.target
+# - name: Create systemd service
+#   ansible.builtin.copy:
+#     dest: /etc/systemd/system/node_exporter.service
+#     content: |
+#       [Unit]
+#       Description=Prometheus Node Exporter
+#       Wants=network-online.target
+#       After=network-online.target
 
-      [Service]
-      User={{ node_exporter_user }}
-      ExecStart=/usr/local/bin/node_exporter
+#       [Service]
+#       User={{ node_exporter_user }}
+#       ExecStart=/usr/local/bin/node_exporter
 
-      [Install]
-      WantedBy=multi-user.target
-  notify: Restart node_exporter
+#       [Install]
+#       WantedBy=multi-user.target
+#   notify: Restart node_exporter
 
-- name: Enable and start node_exporter
-  ansible.builtin.systemd:
-    name: node_exporter
-    enabled: true
-    state: started
+# - name: Enable and start node_exporter
+#   ansible.builtin.systemd:
+#     name: node_exporter
+#     enabled: true
+#     state: started
