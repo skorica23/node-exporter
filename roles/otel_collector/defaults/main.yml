@@ -24,5 +24,6 @@ prometheus_remote_write_endpoint: "http://prometheus.rke2-cluster.local:9090/api
 # prometheus_remote_write_password: "password"
 
 # Additional labels to add to all metrics
+hostname: "node-exporter-02"
 cluster_name: "management-rke2"
 datacenter: "dc1"

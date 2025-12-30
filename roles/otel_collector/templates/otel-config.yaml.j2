@@ -7,8 +7,8 @@ receivers:
           static_configs:
             - targets: ['{{ node_exporter_endpoint }}']
               labels:
-                instance: '{{ ansible_hostname }}'
-                environment: 'production'
+                instance: '{{ hostname }}'
+                environment: ' Test '
                 cluster: '{{ cluster_name }}'
                 datacenter: '{{ datacenter }}'
 
