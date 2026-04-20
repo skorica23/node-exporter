@@ -5,9 +5,9 @@ template_name: ubuntu-2404-cloud-init   #openSuse-Leap-15.6-cloudinit-template
 #yvmid: 106
 vm_name: node-exporter-02
 
-vm_ip:  10.30.30.13
+vm_ip:  x.x.x.x
 vm_cidr: 24
-vm_gateway: 10.30.30.1
+vm_gateway: x.x.x.x
 vm_dns: 1.1.1.1
 
 storage: local-zfs
